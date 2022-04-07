@@ -16,7 +16,11 @@ def mainPage(stdscr):
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
+    CYAN_Txt = curses.color_pair(5)
+    titleColor = curses.color_pair(4)
     screen = curses.initscr()
     curses.noecho()
     curses.cbreak()
@@ -41,7 +45,7 @@ def mainPage(stdscr):
         IP = f"IP adress :"
         IPInt = f'  └─ Intern: {network_info.getIpExtAdress()}'
         IPExt = f"  └─ Extern: {network_info.getIpInternAdress()}"
-        IpForward = f"Forward packages: {network_info.getIpForward()}"
+        IpForward = f"Forward packages: "
         Interface = f"Network interfaces list:"
         
 
@@ -56,25 +60,26 @@ def mainPage(stdscr):
                       (width - len(statusbarstr) - 1))
         stdscr.attroff(curses.color_pair(3))
 
-        stdscr.addstr(start_y, start_x_title, title)
+        stdscr.addstr(start_y, start_x_title, title, titleColor | curses.A_BOLD)
 
-        stdscr.addstr(start_y + 3, start_x_middle, IP)
+        stdscr.addstr(start_y + 3, start_x_middle, IP, CYAN_Txt | curses.A_BOLD)
         stdscr.addstr(start_y + 4, start_x_middle, IPInt)
         stdscr.addstr(start_y + 5, start_x_middle, IPExt)
-        stdscr.addstr(start_y + 6, start_x_middle, IpForward)
-        stdscr.addstr(start_y + 7, start_x_middle, Interface)
+        stdscr.addstr(start_y + 6, start_x_middle, IpForward, CYAN_Txt | curses.A_BOLD)
+        stdscr.addstr( str(network_info.getIpForward()))
+        stdscr.addstr(start_y + 7, start_x_middle, Interface, CYAN_Txt | curses.A_BOLD)
 
         for i in range( len(Interfaces)):
             y = (start_y + 7) + (i + 1)
             stdscr.addstr( y, start_x_middle, f"  └─ {Interfaces[i]}")
 
-        stdscr.addstr( y + 1, start_x_middle, "Traffic Interface:")
+        stdscr.addstr( y + 1, start_x_middle, "Traffic Interface:", CYAN_Txt | curses.A_BOLD)
         y += 2
         for i in range(len(TrafficInterface)):
             y = y + i
             stdscr.addstr( y, start_x_middle, f"  └─ Name: {TrafficInterface[i][0]} | Received: {TrafficInterface[i][1]} | Sent: {TrafficInterface[i][2]}")
 
-        stdscr.addstr( y + 1, start_x_middle, "Routes:")
+        stdscr.addstr( y + 1, start_x_middle, "Routes:", CYAN_Txt | curses.A_BOLD)
 
         y += 2
         for i in range( len(Routes)):

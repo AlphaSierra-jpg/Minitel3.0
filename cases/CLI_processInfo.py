@@ -14,9 +14,12 @@ def mainPage(stdscr):
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
     height, width = stdscr.getmaxyx()
 
+    titleColor = curses.color_pair(4)
     screen = curses.initscr()
     curses.noecho()
     curses.cbreak()
@@ -25,6 +28,7 @@ def mainPage(stdscr):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_CYAN)
     highlightText = curses.color_pair(1)
     normalText = curses.A_NORMAL
+    CYAN_AND_BLACK = curses.color_pair(5)
     screen.border(0)
     curses.curs_set(0)
     max_row = 10
@@ -34,7 +38,7 @@ def mainPage(stdscr):
 
     AllProcessTab = process_info.getProcess()
 
-    title = "All Packages installed:"[:width-1]
+    title = "All Ongoing Processes:"[:width-1]
     subtitle = "Select with the arrows and press enter for information."[:width-1]
     statusbarstr = "Press the number to make your selection and 'q' to go back. del stop and f force Stop"
 
@@ -49,7 +53,7 @@ def mainPage(stdscr):
 
 
 
-    stdscr.addstr(start_y, start_x_title, title)
+    stdscr.addstr(start_y, start_x_title, title, titleColor | curses.A_BOLD)
     stdscr.addstr(start_y + 1, start_x_subtitle, subtitle)
 
     pages = int(ceil(len(AllProcessTab) / max_row))
@@ -60,8 +64,9 @@ def mainPage(stdscr):
         if len(AllProcessTab) == 0:
             box.addstr(1, 1, "There aren't strings", highlightText)
         else:
-
-            box.addstr(i, 2, f"{str( i )} - {AllProcessTab[i - 1][1]}", highlightText if i == position else normalText )
+            box.addstr( i, 2, f"{str( i )}", highlightText if i == position else CYAN_AND_BLACK)
+            box.addstr(f" - ", highlightText if i == position else normalText)
+            box.addstr(f"{AllProcessTab[i - 1][1]}", highlightText if i == position else normalText )
 
             if i == len(AllProcessTab):
                 break
@@ -112,7 +117,16 @@ def mainPage(stdscr):
         if x == ord( "\n" ) and len(AllProcessTab) != 0:
             screen.erase()
             screen.border( 0 )
-            screen.addstr( start_y + 6 + max_row, (width // 2) - 35, f" pid: {AllProcessTab[ position - 1 ][0]} - name: { AllProcessTab[ position - 1 ][1]} - status: { AllProcessTab[ position - 1 ][2]} - ppid: { AllProcessTab[ position - 1 ][3]} - cmdline: { AllProcessTab[ position - 1 ][4]}" )
+            screen.addstr( start_y + 6 + max_row, (width // 2) - 35, f"pid: ", CYAN_AND_BLACK)
+            screen.addstr( str(AllProcessTab[ position - 1 ][0])+" - ")
+            screen.addstr("name: ", CYAN_AND_BLACK)
+            screen.addstr( str(AllProcessTab[ position - 1 ][1])+" - ")
+            screen.addstr("status: ", CYAN_AND_BLACK) 
+            screen.addstr( str(AllProcessTab[ position - 1 ][2])+" - ")
+            screen.addstr("ppid: ", CYAN_AND_BLACK)
+            screen.addstr( str(AllProcessTab[ position - 1 ][3])+" - ")
+            screen.addstr("cmdline: ", CYAN_AND_BLACK)
+            screen.addstr( str(AllProcessTab[ position - 1 ][4]))
         if x == 263: #del
             screen.addstr( start_y + 8 + max_row, (width // 2) - 35, process_info.isSoftStopProcess(AllProcessTab[ position - 1 ][0], True))
             
@@ -129,7 +143,8 @@ def mainPage(stdscr):
                 box.addstr(1, 1, "There aren't strings",  highlightText)
             else:
 
-                box.addstr(i - (max_row * (page - 1)), 2, f"{str( i )} - {AllProcessTab[i - 1][1]}", highlightText if i == position else normalText)
+                box.addstr(i - (max_row * (page - 1)), 2, f"{str( i )}", highlightText if i == position else CYAN_AND_BLACK)
+                box.addstr(f" - {AllProcessTab[i - 1][1]}", highlightText if i == position else normalText)
                 if i == len(AllProcessTab):
                     break
         stdscr.attron(curses.color_pair(3))
@@ -138,7 +153,7 @@ def mainPage(stdscr):
                       (width - len(statusbarstr) - 1))
         stdscr.attroff(curses.color_pair(3))
 
-        stdscr.addstr(start_y, start_x_title, title)
+        stdscr.addstr(start_y, start_x_title, title, titleColor | curses.A_BOLD)
         stdscr.addstr(start_y + 1, start_x_subtitle, subtitle)
 
         screen.refresh()
