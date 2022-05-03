@@ -1,7 +1,11 @@
+#Update dependencies
+sudo apt update -y
+sudo apt upgrade -y
+
 #Installing dependencies
-sudo apt install pip
-sudo pip install psutil
-sudo apt install curl
+sudo apt install python3-pip -y
+sudo pip3 install psutil
+sudo apt install curl -y
 
 #creating a user
 sudo adduser minitel --home /home/minitel

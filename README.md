@@ -8,7 +8,7 @@ We generate their username and password with an sh script.
 
 
 ## **STEP TWO** : Information recovery
-In this step, we recovered all the system information, as well as the network, and the ongoing process. 
+In this step, we recovered all the system information, as well as the network, and the ongoing process. We add a new feature, the app auto export your sys information in your home directory.
 
 
 ## **STEP THREE** : Information display

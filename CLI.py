@@ -2,9 +2,12 @@ import curses
 import cases.CLI_GenralInfo
 import cases.CLI_networkInfo
 import cases.CLI_processInfo
+import JSON_export
 
 def menu(stdscr):
 
+    JSON_export.saveScrapInfo()
+    
     stdscr.clear()
     stdscr.refresh()
 
